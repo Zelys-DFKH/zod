@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
 import { expectTypeOf, test } from "vitest";
-import type { NarrowDiscriminatedUnion } from "../discriminated-union-helpers";
+import type { NarrowDiscriminatedUnion } from "../discriminated-union-helpers.js";
 
 test("issue #5850: discriminatedUnion with enum discriminator - problem and workaround", () => {
   const TypesWithOptions = z.enum(["a", "b"]);
