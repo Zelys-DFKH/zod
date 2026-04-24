@@ -49,3 +49,6 @@ export type {
   ZodCoercedDate,
 } from "./coerce.js";
 export * as coerce from "./coerce.js";
+
+// discriminatedUnion helpers
+export type { ExpandDiscriminatorUnion, NarrowDiscriminatedUnion } from "./discriminated-union-helpers.js";
