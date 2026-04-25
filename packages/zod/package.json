@@ -126,7 +126,7 @@
   },
   "scripts": {
     "clean": "git clean -xdf . -e node_modules",
-    "build": "zshy --project tsconfig.build.json",
+    "build": "node prepare-build-config.cjs && zshy --project tsconfig.build-generated.json",
     "postbuild": "tsx ../../scripts/write-stub-package-jsons.ts && pnpm biome check --write .",
     "test:watch": "pnpm vitest",
     "test": "pnpm vitest run",

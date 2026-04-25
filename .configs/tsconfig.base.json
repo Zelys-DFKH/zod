@@ -5,7 +5,6 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "jsx": "react",
-    "ignoreDeprecations": "6.0",
 
     "strict": true,
     "alwaysStrict": true,
