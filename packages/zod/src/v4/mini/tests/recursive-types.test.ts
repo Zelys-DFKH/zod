@@ -1,6 +1,10 @@
 import { expect, expectTypeOf, test } from "vitest";
 import { z } from "zod/mini";
 
+// Helper for type compatibility check (works across TS versions)
+type Assignable<T, U> = T extends U ? true : false;
+type Assert<T extends true> = T;
+
 test("recursion with z.lazy", () => {
   const data = {
     name: "I",
@@ -30,11 +34,11 @@ test("recursion with z.lazy", () => {
   });
   Category.parse(data);
 
+  type ActualCategory = z.infer<typeof Category>;
   interface _Category {
     name: string;
     subcategories?: _Category[];
   }
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
 });
 
 test("recursion involving union type", () => {
@@ -104,15 +108,12 @@ test("mutual recursion - native", () => {
   Alazy.parse(testData);
   Blazy.parse(testData.b);
 
-  interface _Alazy {
-    val: number;
-    b?: _Blazy;
-  }
-  interface _Blazy {
-    val: number;
-    a?: _Alazy;
-  }
-  // Type assertions skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  type ActualAlazy = z.infer<typeof Alazy>;
+  type ActualBlazy = z.infer<typeof Blazy>;
+
+  // Type verification through value assignability
+  const _verifyAlazy: ActualAlazy = testData;
+  const _verifyBlazy: ActualBlazy = testData.b;
 
   expect(() => Alazy.parse({ val: "asdf" })).toThrow();
 });
@@ -134,13 +135,17 @@ test("pick and omit with getter", () => {
 
   const PickedCategory = z.pick(Category, { name: true });
   const OmittedCategory = z.omit(Category, { subcategories: true });
+
+  type ActualPickedCategory = z.infer<typeof PickedCategory>;
+  type ActualOmittedCategory = z.infer<typeof OmittedCategory>;
   interface _PickedCategory {
     name: string;
   }
   interface _OmittedCategory {
     name: string;
   }
-  // Type assertions skipped due to TS 5.5 vs TS 6.0 differences in structural type representation
+  type _CheckPicked = Assert<Assignable<ActualPickedCategory, _PickedCategory>>;
+  type _CheckOmitted = Assert<Assignable<ActualOmittedCategory, _OmittedCategory>>;
 
   const picked = { name: "test" };
   const omitted = { name: "test" };

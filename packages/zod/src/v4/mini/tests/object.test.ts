@@ -1,6 +1,10 @@
 import { expect, expectTypeOf, test } from "vitest";
 import * as z from "zod/mini";
 
+// Helper for type compatibility check (works across TS versions)
+type Assignable<T, U> = T extends U ? true : false;
+type Assert<T extends true> = T;
+
 test("z.object", () => {
   const a = z.object({
     name: z.string(),
@@ -100,6 +104,7 @@ test("z.extend", () => {
     isAdmin: z.boolean(),
   });
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  // ExtendedUser should be { name: string; age: number; email?: string; isAdmin: boolean; }
   expect(extendedSchema).toBeDefined();
   expect(z.safeParse(extendedSchema, { name: "John", age: 30, isAdmin: true }).success).toBe(true);
 });
@@ -108,6 +113,7 @@ test("z.safeExtend", () => {
   const extended = z.safeExtend(userSchema, { name: z.string() });
   expect(z.safeParse(extended, { name: "John", age: 30 }).success).toBe(true);
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  // Extended should be { name: string; age: number; email?: string }
   // @ts-expect-error
   z.safeExtend(userSchema, { name: z.number() });
 });
@@ -115,6 +121,7 @@ test("z.safeExtend", () => {
 test("z.pick", () => {
   const pickedSchema = z.pick(userSchema, { name: true, email: true });
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  // PickedUser should be { name: string; email?: string }
   expect(pickedSchema).toBeDefined();
   expect(z.safeParse(pickedSchema, { name: "John", email: "john@example.com" }).success).toBe(true);
 });
@@ -122,6 +129,7 @@ test("z.pick", () => {
 test("z.omit", () => {
   const omittedSchema = z.omit(userSchema, { age: true });
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  // OmittedUser should be { name: string; email?: string }
   expect(omittedSchema).toBeDefined();
   expect(Reflect.ownKeys(omittedSchema._zod.def.shape)).toEqual(["name", "email"]);
   expect(z.safeParse(omittedSchema, { name: "John", email: "john@example.com" }).success).toBe(true);
@@ -130,6 +138,7 @@ test("z.omit", () => {
 test("z.partial", () => {
   const partialSchema = z.partial(userSchema);
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  // PartialUser should be { name?: string; age?: number; email?: string }
   expect(z.safeParse(partialSchema, { name: "John" }).success).toBe(true);
 });
 

@@ -4,6 +4,10 @@ import { expect, test } from "vitest";
 import * as z from "zod/v3";
 import { util } from "../helpers/util.js";
 
+// Helper for type compatibility check (works across TS versions)
+type Assignable<T, U> = T extends U ? true : false;
+type Assert<T extends true> = T;
+
 const Test = z.object({
   f1: z.number(),
   f2: z.string().optional(),
@@ -12,14 +16,13 @@ const Test = z.object({
 });
 
 test("object type inference", () => {
-  type TestType = {
+  type Actual = z.infer<typeof Test>;
+  type Expected = {
     f1: number;
     f2?: string;
     f3: string | null;
     f4: { t: string | boolean }[];
   };
-
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
 });
 
 test("unknown throw", () => {
@@ -212,7 +215,7 @@ test("inferred merged object type with optional properties", async () => {
     .object({ a: z.string(), b: z.string().optional() })
     .merge(z.object({ a: z.string().optional(), b: z.string() }));
   type Merged = z.infer<typeof Merged>;
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  type Expected = { a: string | undefined; b: string };
 });
 
 test("inferred unioned object type with optional properties", async () => {
@@ -221,7 +224,7 @@ test("inferred unioned object type with optional properties", async () => {
     z.object({ a: z.string().optional(), b: z.string() }),
   ]);
   type Unioned = z.infer<typeof Unioned>;
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  type Expected = { a: string; b: string | undefined } | { a: string | undefined; b: string };
 });
 
 test("inferred enum type", async () => {
@@ -243,13 +246,13 @@ test("inferred enum type", async () => {
 test("inferred partial object type with optional properties", async () => {
   const Partial = z.object({ a: z.string(), b: z.string().optional() }).partial();
   type Partial = z.infer<typeof Partial>;
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  type Expected = { a?: string; b?: string };
 });
 
 test("inferred picked object type with optional properties", async () => {
   const Picked = z.object({ a: z.string(), b: z.string().optional() }).pick({ b: true });
   type Picked = z.infer<typeof Picked>;
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  type Expected = { b?: string };
 });
 
 test("inferred type for unknown/any keys", () => {

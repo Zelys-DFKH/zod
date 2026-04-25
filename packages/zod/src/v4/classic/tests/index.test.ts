@@ -2,6 +2,10 @@ import { expect, expectTypeOf, test } from "vitest";
 import * as z from "zod/v4";
 import type { util } from "zod/v4/core";
 
+// Helper for type compatibility check (works across TS versions)
+type Assignable<T, U> = T extends U ? true : false;
+type Assert<T extends true> = T;
+
 test("z.boolean", () => {
   const a = z.boolean();
   expect(z.parse(a, true)).toEqual(true);
@@ -247,8 +251,7 @@ test("z.tuple", () => {
   const b = z.tuple([z.string(), z.number(), z.optional(z.string())], z.boolean());
   type b = z.output<typeof b>;
 
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional element representation
-  const datas = [
+  const datas: b[] = [
     ["hello", 123],
     ["hello", 123, "world"],
     ["hello", 123, "world", true],
@@ -265,8 +268,12 @@ test("z.tuple", () => {
   const cArgs = [z.string(), z.number(), z.optional(z.string())] as const;
   const c = z.tuple(cArgs, z.boolean());
   type c = z.output<typeof c>;
-  // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional element representation
-  // type c = z.output<typeof c>;
+
+  const cDatas: c[] = [
+    ["hello", 123],
+    ["hello", 123, "world"],
+    ["hello", 123, "world", true],
+  ];
 });
 
 test("z.record", () => {
