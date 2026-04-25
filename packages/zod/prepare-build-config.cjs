@@ -3,7 +3,7 @@ const fs = require('fs');
 // Detect TypeScript version
 const tsPackage = require.resolve('typescript/package.json');
 const tsVersion = JSON.parse(fs.readFileSync(tsPackage, 'utf-8')).version;
-const majorVersion = parseInt(tsVersion.split('.')[0]);
+const majorVersion = Number.parseInt(tsVersion.split('.')[0]);
 
 // Read the base build config
 const baseConfig = JSON.parse(fs.readFileSync('./tsconfig.build.json', 'utf-8'));
