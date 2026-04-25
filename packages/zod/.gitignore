@@ -5,6 +5,7 @@
 **/*.d.mts
 **/*.d.cts
 **/package.json
+tsconfig.build-generated.json
 
 # Build script exception
 !prepare-build-config.cjs
