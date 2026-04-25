@@ -1,0 +1,25 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Shell scripts
+*.sh text eol=lf
+
+# Config files
+*.json text eol=lf
+*.jsonc text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+
+# Source code
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+
+# Markdown and docs
+*.md text eol=lf
+
+# Windows batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
