@@ -9,5 +9,5 @@
     "skipLibCheck": false,
     "types": []
   },
-  "include": ["src/*.ts", "src/*.mts", "src/*.cts"],
+  "include": ["src/*.ts", "src/*.mts", "src/*.cts"]
 }

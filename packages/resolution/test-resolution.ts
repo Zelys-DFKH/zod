@@ -6,9 +6,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function buildZshy() {
+  console.log("🔨 Preparing TypeScript config...");
+  try {
+    await execa("node", ["prepare-build-config.cjs"], {
+      cwd: __dirname,
+      stdio: "inherit",
+    });
+  } catch (error) {
+    console.error("❌ Error preparing config:", error);
+    process.exit(1);
+  }
+
   console.log("🔨 Building project with zshy...");
   try {
-    await execa("zshy", [], {
+    await execa("zshy", ["--project", "tsconfig.build-generated.json"], {
       cwd: __dirname,
       stdio: "inherit",
     });
