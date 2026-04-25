@@ -15,8 +15,8 @@ const nested = z.object({
 });
 
 test("shallow inference", () => {
-  const shallow = nested.partial();
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  nested.partial();
 });
 
 test("shallow partial parse", () => {
@@ -95,8 +95,8 @@ test("deep partial inference", () => {
     tuple: z.tuple([z.object({ value: z.string() })]),
   });
 
-  const partialed = mySchema.deepPartial();
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
+  mySchema.deepPartial();
 });
 
 test("required", () => {

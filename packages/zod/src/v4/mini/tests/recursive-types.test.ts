@@ -160,21 +160,9 @@ test("deferred self-recursion", () => {
     },
   });
 
-  const Output = z.object({
-    id: z.int(), //.nonnegative(),
-    name: z.string(),
-    features: z.array(Feature), //.array(), // <—
-  });
-
   type _Feature = {
     title: string;
     features?: _Feature[];
-  };
-
-  type _Output = {
-    id: number;
-    name: string;
-    features: _Feature[];
   };
 
   // Type assertions skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
