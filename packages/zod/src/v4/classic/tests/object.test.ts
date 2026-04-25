@@ -12,7 +12,7 @@ const Test = z.object({
 test("object type inference", () => {
   type TestType = {
     f1: number;
-    f2?: string | undefined;
+    f2?: string;
     f3: string | null;
     f4: { t: string | boolean }[];
   };
@@ -577,8 +577,8 @@ test("empty shape", () => {
 
 test("zodtype assignability", () => {
   // Does not error
-  z.object({ hello: z.string().optional() }) satisfies z.ZodType<{ hello?: string | undefined }>;
-  z.object({ hello: z.string() }) satisfies z.ZodType<{ hello?: string | undefined }>;
+  z.object({ hello: z.string().optional() }) satisfies z.ZodType<{ hello?: string }>;
+  z.object({ hello: z.string() }) satisfies z.ZodType<{ hello?: string }>;
   // @ts-expect-error
   z.object({}) satisfies z.ZodType<{ hello: string | undefined }>;
   // @ts-expect-error
@@ -586,7 +586,7 @@ test("zodtype assignability", () => {
   // @ts-expect-error
   z.object({ hello: z.string().optional() }) satisfies z.ZodType<{ hello: string }>;
   // @ts-expect-error
-  z.object({ hello: z.number() }) satisfies z.ZodType<{ hello?: string | undefined }>;
+  z.object({ hello: z.number() }) satisfies z.ZodType<{ hello?: string }>;
 });
 
 test("index signature in shape", () => {

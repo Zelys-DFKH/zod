@@ -18,9 +18,9 @@ test("shallow inference", () => {
   const shallow = nested.partial();
   type shallow = z.infer<typeof shallow>;
   type correct = {
-    name?: string | undefined;
-    age?: number | undefined;
-    outer?: { inner: string } | undefined;
+    name?: string;
+    age?: number;
+    outer?: { inner: string };
     array?: { asdf: string }[];
   };
   util.assertEqual<shallow, correct>(true);
@@ -42,9 +42,9 @@ test("deep partial inference", () => {
   type deep = z.infer<typeof deep>;
   type correct = {
     array?: { asdf?: string }[];
-    name?: string | undefined;
-    age?: number | undefined;
-    outer?: { inner?: string | undefined } | undefined;
+    name?: string;
+    age?: number;
+    outer?: { inner?: string };
   };
 
   util.assertEqual<deep, correct>(true);
@@ -112,13 +112,11 @@ test("deep partial inference", () => {
   const partialed = mySchema.deepPartial();
   type partialed = z.infer<typeof partialed>;
   type expected = {
-    name?: string | undefined;
-    array?:
-      | {
-          asdf?: string | undefined;
-        }[]
-      | undefined;
-    tuple?: [{ value?: string }] | undefined;
+    name?: string;
+    array?: {
+      asdf?: string;
+    }[];
+    tuple?: [{ value?: string }];
   };
   util.assertEqual<expected, partialed>(true);
 });

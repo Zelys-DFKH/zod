@@ -138,7 +138,7 @@ test("z.omit", () => {
   type OmittedUser = z.infer<typeof omittedSchema>;
   expectTypeOf<OmittedUser>().toEqualTypeOf<{
     name: string;
-    email?: string | undefined;
+    email?: string;
   }>();
   expect(omittedSchema).toBeDefined();
   expect(Reflect.ownKeys(omittedSchema._zod.def.shape)).toEqual(["name", "email"]);

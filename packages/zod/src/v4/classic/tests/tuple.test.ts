@@ -126,7 +126,7 @@ test("tuple with optional elements", () => {
 
 test("tuple with optional elements followed by required", () => {
   const myTuple = z.tuple([z.string(), z.number().optional(), z.string()]).rest(z.boolean());
-  expectTypeOf<typeof myTuple._output>().toEqualTypeOf<[string, number | undefined, string, ...boolean[]]>();
+  expectTypeOf<typeof myTuple._output>().toEqualTypeOf<[string, number?, string, ...boolean[]]>();
 
   const goodData = [
     ["asdf", 1234, "asdf"],

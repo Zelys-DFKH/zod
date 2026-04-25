@@ -109,11 +109,11 @@ test("mutual recursion - native", () => {
   type Blazy = z.infer<typeof Blazy>;
   interface _Alazy {
     val: number;
-    b?: _Blazy | undefined;
+    b?: _Blazy;
   }
   interface _Blazy {
     val: number;
-    a?: _Alazy | undefined;
+    a?: _Alazy;
   }
   expectTypeOf<Alazy>().toEqualTypeOf<_Alazy>();
   expectTypeOf<Blazy>().toEqualTypeOf<_Blazy>();
@@ -178,7 +178,7 @@ test("deferred self-recursion", () => {
 
   type _Feature = {
     title: string;
-    features?: _Feature[] | undefined;
+    features?: _Feature[];
   };
 
   type _Output = {
