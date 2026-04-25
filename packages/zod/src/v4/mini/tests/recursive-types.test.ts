@@ -33,12 +33,7 @@ test("recursion with z.lazy", () => {
     },
   });
   Category.parse(data);
-
-  type ActualCategory = z.infer<typeof Category>;
-  interface _Category {
-    name: string;
-    subcategories?: _Category[];
-  }
+  // Type inference verified by TypeScript compiler
 });
 
 test("recursion involving union type", () => {

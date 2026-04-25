@@ -1,10 +1,6 @@
 import { expect, expectTypeOf, test } from "vitest";
 import * as z from "zod/mini";
 
-// Helper for type compatibility check (works across TS versions)
-type Assignable<T, U> = T extends U ? true : false;
-type Assert<T extends true> = T;
-
 test("z.object", () => {
   const a = z.object({
     name: z.string(),

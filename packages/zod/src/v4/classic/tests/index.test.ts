@@ -2,10 +2,6 @@ import { expect, expectTypeOf, test } from "vitest";
 import * as z from "zod/v4";
 import type { util } from "zod/v4/core";
 
-// Helper for type compatibility check (works across TS versions)
-type Assignable<T, U> = T extends U ? true : false;
-type Assert<T extends true> = T;
-
 test("z.boolean", () => {
   const a = z.boolean();
   expect(z.parse(a, true)).toEqual(true);
@@ -274,6 +270,9 @@ test("z.tuple", () => {
     ["hello", 123, "world"],
     ["hello", 123, "world", true],
   ];
+  for (const data of cDatas) {
+    expect(z.parse(c, data)).toEqual(data);
+  }
 });
 
 test("z.record", () => {

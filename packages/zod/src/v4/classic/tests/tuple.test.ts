@@ -1,10 +1,6 @@
 import { expect, expectTypeOf, test } from "vitest";
 import * as z from "zod/v4";
 
-// Helper for type compatibility check (works across TS versions)
-type Assignable<T, U> = T extends U ? true : false;
-type Assert<T extends true> = T;
-
 test("successful validation", () => {
   const testTuple = z.tuple([z.string(), z.number()]);
   expectTypeOf<typeof testTuple._output>().toEqualTypeOf<[string, number]>();
@@ -111,8 +107,6 @@ test("async validation", async () => {
 
 test("tuple with optional elements", () => {
   const myTuple = z.tuple([z.string(), z.number().optional(), z.string().optional()]).rest(z.boolean());
-  type Actual = z.infer<typeof myTuple>;
-  type Expected = [string, number | undefined, string | undefined, ...boolean[]];
 
   const goodData = [["asdf"], ["asdf", 1234], ["asdf", 1234, "asdf"], ["asdf", 1234, "asdf", true, false, true]];
   for (const data of goodData) {
@@ -154,8 +148,6 @@ test("tuple with optional elements followed by required", () => {
 
 test("tuple with all optional elements", () => {
   const allOptionalTuple = z.tuple([z.string().optional(), z.number().optional(), z.boolean().optional()]);
-  type Actual = z.infer<typeof allOptionalTuple>;
-  type Expected = [string | undefined, number | undefined, boolean | undefined];
 
   // Empty array should be valid (all items optional)
   expect(allOptionalTuple.parse([])).toEqual([]);
