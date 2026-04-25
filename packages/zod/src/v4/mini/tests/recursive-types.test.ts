@@ -30,7 +30,6 @@ test("recursion with z.lazy", () => {
   });
   Category.parse(data);
 
-  type Category = z.infer<typeof Category>;
   interface _Category {
     name: string;
     subcategories?: _Category[];
@@ -105,8 +104,6 @@ test("mutual recursion - native", () => {
   Alazy.parse(testData);
   Blazy.parse(testData.b);
 
-  type Alazy = z.infer<typeof Alazy>;
-  type Blazy = z.infer<typeof Blazy>;
   interface _Alazy {
     val: number;
     b?: _Blazy;
@@ -137,8 +134,6 @@ test("pick and omit with getter", () => {
 
   const PickedCategory = z.pick(Category, { name: true });
   const OmittedCategory = z.omit(Category, { subcategories: true });
-  type PickedCategory = z.infer<typeof PickedCategory>;
-  type OmittedCategory = z.infer<typeof OmittedCategory>;
   interface _PickedCategory {
     name: string;
   }
@@ -164,15 +159,12 @@ test("deferred self-recursion", () => {
       return z.optional(z.array(Feature)); //.optional();
     },
   });
-  type Feature = z.infer<typeof Feature>;
 
   const Output = z.object({
     id: z.int(), //.nonnegative(),
     name: z.string(),
     features: z.array(Feature), //.array(), // <—
   });
-
-  type Output = z.output<typeof Output>;
 
   type _Feature = {
     title: string;

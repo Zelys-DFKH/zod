@@ -16,13 +16,6 @@ const nested = z.object({
 
 test("shallow inference", () => {
   const shallow = nested.partial();
-  type shallow = z.infer<typeof shallow>;
-  type correct = {
-    name?: string;
-    age?: number;
-    outer?: { inner: string };
-    array?: { asdf: string }[];
-  };
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
 });
 
@@ -39,13 +32,6 @@ test("deep partial inference", () => {
   const deep = nested.deepPartial();
   const asdf = deep.shape.array.unwrap().element.shape.asdf.unwrap();
   asdf.parse("asdf");
-  type deep = z.infer<typeof deep>;
-  type correct = {
-    array?: { asdf?: string }[];
-    name?: string;
-    age?: number;
-    outer?: { inner?: string };
-  };
 
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
 });
@@ -110,14 +96,6 @@ test("deep partial inference", () => {
   });
 
   const partialed = mySchema.deepPartial();
-  type partialed = z.infer<typeof partialed>;
-  type expected = {
-    name?: string;
-    array?: {
-      asdf?: string;
-    }[];
-    tuple?: [{ value?: string }];
-  };
   // Type assertion skipped due to TS 5.5 vs TS 6.0 differences in optional property representation
 });
 
