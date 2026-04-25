@@ -22,31 +22,31 @@ import { z } from "zod/v4";
  * ✗ z.object({ type: z.enum(['a', 'b']), ... })
  */
 test("discriminatedUnion with enum discriminator - limitation and workaround documented", () => {
-  const TypesWithOptions = z.enum(['a', 'b'])
-  const TypesWithoutOptions = z.enum(['c', 'd'])
-  const AllTypes = z.union([TypesWithOptions, TypesWithoutOptions])
-  type AllTypes = z.infer<typeof AllTypes>
-  expectTypeOf<AllTypes>().toMatchTypeOf<'a' | 'b' | 'c' | 'd'>()
+  const TypesWithOptions = z.enum(["a", "b"]);
+  const TypesWithoutOptions = z.enum(["c", "d"]);
+  const AllTypes = z.union([TypesWithOptions, TypesWithoutOptions]);
+  type AllTypes = z.infer<typeof AllTypes>;
+  expectTypeOf<AllTypes>().toMatchTypeOf<"a" | "b" | "c" | "d">();
 
-  const Demo = z.discriminatedUnion('type', [
+  const Demo = z.discriminatedUnion("type", [
     z.object({
       type: TypesWithOptions,
-      options: z.object({ foo: z.string() })
+      options: z.object({ foo: z.string() }),
     }),
     z.object({
-      type: TypesWithoutOptions
-    })
-  ])
+      type: TypesWithoutOptions,
+    }),
+  ]);
 
-  type Demo = z.infer<typeof Demo>
+  type Demo = z.infer<typeof Demo>;
 
   // This demonstrates the issue - Extract returns never
   // Use NarrowDiscriminatedUnion helper instead
   // See test-5850-complete.test.ts for the working solution
-  
+
   // For runtime validation, this still works:
-  const obj1: Demo = { type: 'a', options: { foo: 'bar' } }
-  const obj2: Demo = { type: 'c' }
-  expectTypeOf(obj1).toMatchTypeOf<Demo>()
-  expectTypeOf(obj2).toMatchTypeOf<Demo>()
+  const obj1: Demo = { type: "a", options: { foo: "bar" } };
+  const obj2: Demo = { type: "c" };
+  expectTypeOf(obj1).toMatchTypeOf<Demo>();
+  expectTypeOf(obj2).toMatchTypeOf<Demo>();
 });
